@@ -24,6 +24,7 @@ import uk.co.eelpieconsulting.common.http.HttpNotFoundException;
 import uk.co.eelpieconsulting.feedlistener.model.FeedItem;
 import uk.co.eelpieconsulting.feedlistener.model.InstagramGeographySubscription;
 import uk.co.eelpieconsulting.feedlistener.model.InstagramTagSubscription;
+import uk.co.eelpieconsulting.feedlistener.model.InstagramUser;
 
 import com.google.common.collect.Lists;
 
@@ -34,17 +35,25 @@ public class InstagramApi {
 	private static final String INSTAGRAM_API_AUTHORIZE = "https://api.instagram.com/oauth/authorize/";
 	private static final String INSTAGRAM_API_ACCESS_TOKEN = "https://api.instagram.com/oauth/access_token";
 	private static final String INSTAGRAM_API_V1_SUBSCRIPTIONS = "https://api.instagram.com/v1/subscriptions";
-	
+	private final static String INSTAGRAM_API_USER_SELF = "https://api.instagram.com/v1/users/self";
+			
 	private static final String DATA = "data";
 	
 	private final InstagramFeedItemMapper mapper;
+	private final InstagramUserParser instagramUserParser;
 	private final HttpFetcher httpFetcher;
 	
 	public InstagramApi() {
 		this.mapper = new InstagramFeedItemMapper();
+		this.instagramUserParser = new InstagramUserParser();
 		this.httpFetcher = new HttpFetcher();
 	}
-
+	
+	public InstagramUser self(String accessToken) throws JSONException, HttpNotFoundException, HttpBadRequestException, HttpForbiddenException, HttpFetchException {
+		final String response = httpFetcher.get(INSTAGRAM_API_USER_SELF + "?access_token=" + accessToken);
+		return instagramUserParser.parse(response);
+	}
+	
 	public InstagramTagSubscription createTagSubscription(String tag, String clientId, String clientSecret, String callbackUrl, String channelId, String username) throws HttpNotFoundException, HttpBadRequestException, HttpForbiddenException, HttpFetchException, UnsupportedEncodingException, JSONException {		
 		final List<NameValuePair> nameValuePairs = commonSubscriptionFields( clientId, clientSecret, callbackUrl);		
 		nameValuePairs.add(new BasicNameValuePair("object", "tag"));
@@ -169,5 +178,5 @@ public class InstagramApi {
 		nameValuePairs.add(new BasicNameValuePair("verify_token", verifyToken));
 		return nameValuePairs;
 	}
-	
+
 }

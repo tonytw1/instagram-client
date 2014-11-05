@@ -1,0 +1,18 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "data": {
+    "username": "auser",
+    "bio": "",
+    "website": "",
+    "profile_picture": "http://images.ak.instagram.com/profiles/anonymousUser.jpg",
+    "full_name": "",
+    "counts": {
+      "media": 0,
+      "followed_by": 0,
+      "follows": 0
+    },
+    "id": "123"
+  }
+}

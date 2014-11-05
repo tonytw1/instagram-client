@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import uk.co.eelpieconsulting.common.http.HttpBadRequestException;
 import uk.co.eelpieconsulting.feedlistener.model.FeedItem;
-import uk.co.eelpieconsulting.instagram.api.InstagramApi;
+import uk.co.eelpieconsulting.feedlistener.model.InstagramUser;
 
 public class InstagramIT {
 	
@@ -18,6 +18,12 @@ public class InstagramIT {
 
 	public InstagramIT() {
 		this.api = new InstagramApi();
+	}
+	
+	@Test
+	public void canVerifyAccessTokenOwner() throws Exception {
+		final InstagramUser self = api.self(ACCESS_TOKEN);
+		System.out.println(self);
 	}
 	
 	@Test
